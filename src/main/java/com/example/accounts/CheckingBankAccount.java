@@ -21,6 +21,10 @@ public class CheckingBankAccount extends BankAccount {
 
     public static final double MONTHLY_FEE = 13.5;
 
+    public CheckingBankAccount() {
+        super();
+    }
+
     @Builder
     public CheckingBankAccount(String accountNumber, BankAccountHolder accountHolder) {
         super(accountNumber, accountHolder, AccountType.CHECKING);

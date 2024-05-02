@@ -16,8 +16,8 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = true)
 public class BankOwner extends BankUser {
 
-    public BankOwner(String firstName, String lastName, String email, String phoneNumber) {
-        super(firstName, lastName, email, phoneNumber);
+    public BankOwner(Long id, String firstName, String lastName, String email, String phoneNumber) {
+        super(id, firstName, lastName, email, phoneNumber);
     }
 
     /*TODO

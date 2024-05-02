@@ -15,8 +15,8 @@ import com.example.transactions.WithdrawTransaction;
 @EqualsAndHashCode(callSuper = true)
 public class BankEmployee extends BankUser {
 
-    public BankEmployee(String firstName, String lastName, String email, String phoneNumber) {
-        super(firstName, lastName, email, phoneNumber);
+    public BankEmployee(Long id, String firstName, String lastName, String email, String phoneNumber) {
+        super(id, firstName, lastName, email, phoneNumber);
     }
 
 

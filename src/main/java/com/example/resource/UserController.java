@@ -26,43 +26,26 @@ public class UserController {
     }
 
     @GET
-    @Path("/{firstName}/{lastName}")
-    public Uni<BankUser> getUser(@PathParam("firstName") String firstName, @PathParam("lastName") String lastName) {
-        return userService.getUser(firstName, lastName);
+    @Path("/{id}")
+    public Uni<BankUser> getUser(@PathParam("id") Long id) {
+        return userService.getUser(id);
     }
 
     @POST
-    @Path("/bank-account-holder")
-    public Uni<BankUser> addBankAccountHolder(BankAccountHolder bankUser) {
-        return userService.addBankAccountHolder(bankUser);
-    }
-
-    @POST
-    @Path("/bank-employee")
-    public Uni<List<BankUser>> addBankEmployee(BankEmployee bankUser) {
-        return userService.addBankEmployee(bankUser);
-    }
-
-    @POST
-    @Path("/bank-owner")
-    public Uni<List<BankUser>> addBankOwner(BankOwner bankUser) {
-        return userService.addBankOwner(bankUser);
+    public Uni<List<BankUser>> addBankOwner(BankUser bankUser) {
+        return userService.addBankUser(bankUser);
     }
 
     @DELETE
-    @Path("/{firstName}/{lastName}")
-    public Uni<String> deleteUser(@PathParam("firstName") String firstName, @PathParam("lastName") String lastName) {
-        return userService.deleteUser(firstName, lastName);
+    @Path("/{id}")
+    public Uni<String> deleteUser(@PathParam("id") Long id) {
+        return userService.deleteUser(id);
     }
 
     @PUT
-    public Uni<BankUser> updateUser(@RestQuery String firstName, @RestQuery String lastName, BankAccountHolder bankUserCloud) {
-        return userService.updateUser(firstName, lastName, bankUserCloud);
+    @Path("/{id}")
+    public Uni<BankUser> updateUser(@PathParam("id") Long id, BankAccountHolder bankUserCloud) {
+        return userService.updateUser(id, bankUserCloud);
     }
-
-    //    @GET
-    //    public BankUser getUser(UserIdentificationDTO userIdentificationDTO) {
-    //        return userService.getUser(userIdentificationDTO.getFirstName(), userIdentificationDTO.getFirstName());
-    //    }
 
 }

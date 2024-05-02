@@ -40,4 +40,11 @@ public class Util {
         return filterParameters;
     }
 
+    //    map -> onItem().transform()
+    //    .onItem().transform(i -> i + 1)
+    //    .onItem().transformToUni(i -> Uni.createFrom().item(i + 1))
+    //    flatMap -> onItem().transformToUniAndMerge and onItem().transformToMultiAndMerge
+    //    concatMap -> onItem().transformToUniAndConcatenate and onItem().transformToMultiAndConcatenate
+    // concatenate preserves the order of items while merge uses them as they come - concurrently
+
 }

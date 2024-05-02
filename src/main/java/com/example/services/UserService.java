@@ -1,52 +1,48 @@
 package com.example.services;
 
 import com.example.inMemoryDBs.DB;
-import com.example.users.BankAccountHolder;
+import com.example.repositories.UserRepository;
 import com.example.users.BankEmployee;
-import com.example.users.BankOwner;
 import com.example.users.BankUser;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import io.smallrye.mutiny.subscription.UniEmitter;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @ApplicationScoped
 public class UserService {
 
-    //    map -> onItem().transform()
-    //    .onItem().transform(i -> i + 1)
-    //    .onItem().transformToUni(i -> Uni.createFrom().item(i + 1))
-//    flatMap -> onItem().transformToUniAndMerge and onItem().transformToMultiAndMerge
-//    concatMap -> onItem().transformToUniAndConcatenate and onItem().transformToMultiAndConcatenate
-    // concatenate preserves the order of items while merge uses them as they come - concurrently
-
-    Multi<BankUser> bankUserMulti = Multi.createFrom().iterable(DB.bankUsers); //vjen prej DB si multi
-    Uni<List<BankUser>> bankUserUni = Uni.createFrom().item(DB.bankUsers);
+    @Inject
+    UserRepository userRepository;
 
     public Uni<List<BankUser>> getUsers() {
-        return bankUserUni;
+        return userRepository.getUsers();
     }
 
-    public Uni<BankUser> getUser(String firstName, String lastName) {
-        return bankUserUni.onItem().transform(users -> users.stream().filter(user -> (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName))).findFirst().orElse(null));
+    public Uni<BankUser> getUser(Long id) {
+        return userRepository.getUser(id);
     }
 
-    public Uni<String> deleteUser(String firstName, String lastName) {
-        return bankUserUni.onItem().transform(users -> {
-            if (removeUser(users, firstName, lastName)) {
+    public Uni<String> deleteUser(Long id) {
+        return userRepository.getUsers().onItem().transform(users -> {
+            if (removeUser(users, id)) {
                 return "User deleted successfully";
             } else return "User not found";
         });
     }
 
-    private boolean removeUser(List<BankUser> users, String firstName, String lastName) {
-        return users.removeIf(user -> user.getFirstName().equals(firstName) && user.getLastName().equals(lastName));
+    private boolean removeUser(List<BankUser> users, Long id) {
+        return users.removeIf(user -> user.getId().equals(id));
     }
 
-    public Uni<BankUser> updateUser(String firstName, String lastName, BankUser bankUserCloud) {
+    public Uni<BankUser> updateUser(Long id, BankUser bankUserCloud) {
 
-        return bankUserMulti.onItem().invoke(user -> System.out.println(user.getFirstName())).filter(u -> u.getFirstName().equals(firstName) && u.getLastName().equals(lastName)).onItem().transform(u -> {
+        return userRepository.getUser(id).onItem().transform(u -> {
             if (u != null) {
                 u.setFirstName(bankUserCloud.getFirstName() == null ? u.getFirstName() : bankUserCloud.getFirstName());
                 u.setLastName(bankUserCloud.getLastName() == null ? u.getLastName() : bankUserCloud.getLastName());
@@ -54,26 +50,43 @@ public class UserService {
                 u.setPhoneNumber(bankUserCloud.getPhoneNumber() == null ? u.getPhoneNumber() : bankUserCloud.getPhoneNumber());
                 return u;
             } else return null;
-        }).toUni();
+        });
     }
 
-    public Uni<BankUser> addBankAccountHolder(BankAccountHolder bankUser) {
-        return bankUserUni.onItem().invoke(users -> {
-            users.add(bankUser);
-        }).onItem().transformToUni(users -> Uni.createFrom().item(users.get(users.size() - 1)));
-    }
-
-    public Uni<List<BankUser>> addBankEmployee(BankEmployee bankUser) {
-        return bankUserUni.onItem().transform(users -> {
+    public Uni<List<BankUser>> addBankUser(BankUser bankUser) {
+        bankUser.setId((long) (DB.bankUsers.size() + 1));
+        return userRepository.getUsers().onItem().transform(users -> {
             users.add(bankUser);
             return users;
         });
     }
 
-    public Uni<List<BankUser>> addBankOwner(BankOwner bankUser) {
-        return bankUserUni.onItem().transform(users -> {
-            users.add(bankUser);
-            return users;
-        });
-    }
+//      return Uni.createFrom().emitter(new Consumer<UniEmitter<? super Object>>() {
+//            @Override
+//            public void accept(UniEmitter<? super Object> uniEmitter) {
+//                try {
+//                    userRepository.getUsers().onItem().transform(users -> {
+//                        users.add(bankUser);
+//                        return users;
+//                    });
+//                    uniEmitter.complete();
+//                }
+//                catch ( Exception e){
+//                }
+//
+//            }
+//        }).runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+//              .emitOn(Infrastructure.getDefaultExecutor());
+//        return userRepository.getUsers().onItem().transform(users -> {
+//            users.add(bankUser);
+//            return users;
+//        });
+//    }
+
+//    public Uni<BankUser> addBankUser(BankUser bankUser) {
+//        return userRepository.getUsers().onItem().invoke(users -> {
+//            users.add(bankUser);
+//        }).onItem().transformToUni(users -> Uni.createFrom().item(users.get(users.size() - 1)));
+//    }
+
 }

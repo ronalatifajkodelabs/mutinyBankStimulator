@@ -10,7 +10,6 @@ import com.example.inMemoryDBs.DB;
 import com.example.transactions.Transaction;
 import com.example.transactions.TransferTransaction;
 
-//@Data
 @ToString(callSuper = true)
 public class BankAccountHolder extends BankUser {
 
@@ -18,11 +17,9 @@ public class BankAccountHolder extends BankUser {
     }
 
     @Builder
-    public BankAccountHolder(String firstName, String lastName, String email, String phoneNumber) {
-        super(firstName, lastName, email, phoneNumber);
+    public BankAccountHolder(Long id, String firstName, String lastName, String email, String phoneNumber) {
+        super(id, firstName, lastName, email, phoneNumber);
     }
-
-    static final BankAccountHolder bank = new BankAccountHolder("BANK", "BANK", "BANK", "BANK");
 
     /*TODO
     transferMoney ✅

@@ -13,7 +13,6 @@ import static com.example.inMemoryDBs.DB.bankAccounts;
 
 @Getter
 @Setter
-//@Builder
 @JsonType(
         property = "accountType",
         subtypes = {
