@@ -19,10 +19,6 @@ public class BankAccountService {
     @Inject
     BankAccountRepository bankAccountRepository;
 
-    public Uni<List<BankAccount>> getBankAccounts() {
-        return bankAccountRepository.getBankAccounts();
-    }
-
     public Uni<BankAccount> getBankAccount(String id) {
         return bankAccountRepository.getBankAccount(id);
     }
