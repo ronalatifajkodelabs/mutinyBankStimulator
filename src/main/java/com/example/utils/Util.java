@@ -17,6 +17,19 @@ public class Util {
     }
 
     public static FilterParameters validate(FilterParameters filterParameters) {
+        if (filterParameters.accountType == null) {
+            filterParameters.accountType = AccountType.SAVINGS.toString();
+        }
+        if (filterParameters.orderBy == null) {
+            filterParameters.orderBy = "accountHolder";
+        }
+
+        if (filterParameters.orderType == null) {
+            filterParameters.orderType = "ASC";
+        }
+        if (filterParameters.limit == null) {
+            filterParameters.limit = 10 + "";
+        }
         String orderBy = filterParameters.orderBy;
         String orderType = filterParameters.orderType;
         try {

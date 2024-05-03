@@ -6,7 +6,7 @@ import com.example.enums.AccountType;
 import java.time.LocalDateTime;
 
 @Data
-public class BankAccountRegistrationDTO {
+public class BankAccountInformationDTO {
     private String firstName;
     private String lastName;
     private String email;

@@ -38,6 +38,11 @@ public abstract class BankAccount {
         this.accountType = accountType;
     }
 
+    public BankAccount(String accountNumber, BankAccountHolder accountHolder) {
+        this.accountNumber = accountNumber;
+        this.accountHolder = accountHolder;
+    }
+
     public static BankAccount getBankAccount(String accountNumber) {
         for (BankAccount bankAccount : bankAccounts){
             if (bankAccount.getAccountNumber().equals(accountNumber)) {

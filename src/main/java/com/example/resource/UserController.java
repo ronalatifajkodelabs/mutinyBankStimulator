@@ -1,15 +1,12 @@
 package com.example.resource;
 
+import com.example.services.UserService;
+import com.example.users.BankAccountHolder;
 import com.example.users.BankUser;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.jboss.resteasy.reactive.RestQuery;
-import com.example.services.UserService;
-import com.example.users.BankAccountHolder;
-import com.example.users.BankEmployee;
-import com.example.users.BankOwner;
 
 import java.util.List;
 
@@ -32,14 +29,14 @@ public class UserController {
     }
 
     @POST
-    public Uni<List<BankUser>> addBankOwner(BankUser bankUser) {
+    public Uni<BankUser> addBankOwner(BankUser bankUser) {
         return userService.addBankUser(bankUser);
     }
 
     @DELETE
     @Path("/{id}")
-    public Uni<String> deleteUser(@PathParam("id") Long id) {
-        return userService.deleteUser(id);
+    public Uni<String> deleteBankUser(@PathParam("id") Long id) {
+        return userService.deleteBankUser(id);
     }
 
     @PUT
